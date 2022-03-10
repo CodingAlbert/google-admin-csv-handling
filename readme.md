@@ -9,7 +9,7 @@ move all your csv files exported from Google Admin Console GUI.
 The script parses the files, generates new passwords for all users,and prepares them
 for upload based on a template *users.csv* or any other template you provide it.
 
-##Other Scripts
+## Other Scripts
 
 Other scripts are used for quick double checking of the files. 
 
