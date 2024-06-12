@@ -57,7 +57,7 @@ done < <(tail -n +2 "$OUTPUT_FILE")
 
 # Read users into an array
 declare -a users
-while IFS=, read -r primaryEmail; do
+while IFS=, read -r primaryEmail || [ -n "$primaryEmail" ]; do
     primaryEmail=$(echo "$primaryEmail" | tr -d '\r' | tr -d '\n') # Ensure no newlines or carriage returns
     users+=("$primaryEmail")
 done < <(tail -n +2 "$USER_CSV")
