@@ -77,12 +77,6 @@ while IFS= read -r alias; do
     fi
 done < "$ALIAS_FILE"
 
-# Debug: Print the aliases array
-echo "Aliases available:"
-for alias in "${aliases[@]}"; do
-    echo "Alias: '$alias'"
-done
-
 # Assign aliases to users
 for primaryEmail in "${users[@]}"; do
     # Debug: Print the current user being processed
@@ -114,6 +108,12 @@ for primaryEmail in "${users[@]}"; do
 
     # Write the primaryEmail and alias_with_domain to the output file
     echo "$primaryEmail,$alias_with_domain" >> "$OUTPUT_FILE"
+done
+
+# Write the remaining aliases back to the alias file
+> "$ALIAS_FILE"
+for alias in "${aliases[@]}"; do
+    echo "$alias" >> "$ALIAS_FILE"
 done
 
 echo "Alias assignment completed. Output file: $OUTPUT_FILE"
