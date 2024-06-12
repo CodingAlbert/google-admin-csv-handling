@@ -41,19 +41,22 @@ if [ -z "$ALIAS_ASSIGNMENT_FILE" ] || [ -z "$SENDER_EMAIL" ]; then
 fi
 
 # Email subject
-EMAIL_SUBJECT="New Email Alias Added"
+EMAIL_SUBJECT="Google Workspace: Máš nový školní emailový alias!"
 
 # Template for email body
 EMAIL_BODY_TEMPLATE=$(cat <<'EOF'
-Hi %USERNAME%,
+Ahoj %USERNAME%,
 
-We have added a new email alias to your account: %ALIAS%
+Pro anonymní registraci do internetových služeb bez použití Google účtu jsem ti vytvořil 
+alias email:  %ALIAS%
 
-Best regards,
-Your IT Team
+Při registraci do služby, která neumožňuje použití Google účtu použij jako 
+emailovou adresu tento email.
+
+S pozdravem,
+IT Podpora ZŠ Livingston
 EOF
 )
-
 # Function to send an email using GAM
 send_email() {
     local recipient_email=$1
