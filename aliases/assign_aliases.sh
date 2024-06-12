@@ -2,26 +2,43 @@
 
 # Function to print help
 print_help() {
-    echo "Usage: $0 <alias_assignment_csv>"
+    echo "Usage: $0 -a <alias_assignment_csv> -s <sender_email>"
     echo
     echo "Arguments:"
-    echo "  <alias_assignment_csv>  CSV file with headers 'user' and 'alias' containing the email aliases to be assigned."
+    echo "  -a <alias_assignment_csv>  CSV file with headers 'user' and 'alias' containing the email aliases to be assigned."
+    echo "  -s <sender_email>  The email address to send notifications from."
     echo
     echo "Example:"
-    echo "  $0 alias_assignment.csv"
+    echo "  $0 -a alias_assignment.csv -s admin@example.com"
 }
 
-# Check if the alias assignment file is provided
-if [ -z "$1" ]; then
+# Check if arguments are provided
+if [ "$#" -eq 0 ]; then
     print_help
     exit 1
 fi
 
-# Define the alias assignment file
-ALIAS_ASSIGNMENT_FILE="$1"
+# Parse arguments
+while getopts "a:s:" opt; do
+    case $opt in
+        a)
+            ALIAS_ASSIGNMENT_FILE="$OPTARG"
+            ;;
+        s)
+            SENDER_EMAIL="$OPTARG"
+            ;;
+        *)
+            print_help
+            exit 1
+            ;;
+    esac
+done
 
-# Define the sender email address
-SENDER_EMAIL="admin@example.com"
+# Check if all required arguments are provided
+if [ -z "$ALIAS_ASSIGNMENT_FILE" ] || [ -z "$SENDER_EMAIL" ]; then
+    print_help
+    exit 1
+fi
 
 # Email subject
 EMAIL_SUBJECT="New Email Alias Added"
@@ -56,7 +73,7 @@ while IFS=, read -r user_email alias_email; do
 
     if [ -n "$user_email" ] && [ -n "$alias_email" ]; then
         # Add alias
-        gam update user "$user_email" add alias "$alias_email"
+        gam create alias "$alias_email" user "$user_email"
         if [ $? -eq 0 ]; then
             echo "Alias $alias_email added to user $user_email"
             
